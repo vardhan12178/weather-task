@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useAppDispatch } from '@/redux/hooks';
 import { fetchWeather } from '@/redux/slices/weatherSlice';
 import Autosuggest from 'react-autosuggest';
 import mockData from '@/public/mockData.json';
+import debounce from 'lodash/debounce';
 
 interface Locality {
   city: string;
@@ -33,8 +34,12 @@ const SearchBar: React.FC = () => {
   const [suggestionsList, setSuggestionsList] = useState<string[]>([]);
   const dispatch = useAppDispatch();
 
-  const onSuggestionsFetchRequested = ({ value }: { value: string }) => {
+  const debouncedFetchSuggestions = useCallback(debounce((value: string) => {
     setSuggestionsList(getSuggestions(value));
+  }, 300), []);
+
+  const onSuggestionsFetchRequested = ({ value }: { value: string }) => {
+    debouncedFetchSuggestions(value);
   };
 
   const onSuggestionSelected = (
@@ -69,6 +74,11 @@ const SearchBar: React.FC = () => {
           renderInputComponent={(inputProps: React.InputHTMLAttributes<HTMLInputElement>) => (
             <input
               {...inputProps}
+              aria-autocomplete="list"
+              aria-controls="suggestions-list"
+              aria-expanded={suggestionsList.length > 0}
+              aria-activedescendant={suggestionsList.length > 0 ? 'suggestion-0' : undefined}
+              id="search-input"
               className="w-full text-black dark:text-white bg-white dark:bg-gray-800 py-2 px-4 rounded-full border border-gray-300 dark:border-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition duration-200 ease-in-out"
             />
           )}
@@ -76,7 +86,7 @@ const SearchBar: React.FC = () => {
       </div>
       <button
         onClick={() => dispatch(fetchWeather(value))}
-        className="w-1/2 mt-2 bg-blue-600 text-white dark:bg-indigo-500 dark:text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700 dark:hover:bg-indigo-600 transition duration-200 ease-in-out"
+        className="w-full sm:w-1/2 mt-2 bg-blue-600 text-white dark:bg-indigo-500 dark:text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-700 dark:hover:bg-indigo-600 transition duration-200 ease-in-out"
       >
         Search
       </button>
