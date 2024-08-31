@@ -8,6 +8,71 @@
   --background-end-rgb: 255, 255, 255;
 }
 
+/* Global CSS or your CSS module */
+.autosuggest-container {
+  position: relative;
+  width: 100%;
+}
+
+.autosuggest-input {
+  width: 100%;
+  padding: 14px 20px;
+  border: 1px solid #dcdcdc;
+  border-radius: 24px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  outline: none;
+}
+
+.autosuggest-input:focus {
+  border-color: #a8a8a8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.autosuggest-suggestion {
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.autosuggest-suggestion:hover {
+  background-color: #f1f1f1;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .autosuggest-container {
+    width: 90%;
+  }
+}
+
+.dark .autosuggest-input {
+  background-color: #333;
+  border-color: #555;
+  color: #fff;
+}
+
+.dark .autosuggest-suggestion {
+  color: #ddd;
+}
+
+/* styles/globals.css or other CSS file */
+.react-autosuggest__suggestions-container {
+  position: absolute;
+  z-index: 2;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.react-autosuggest__suggestion {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background: #f0f0f0;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
